@@ -58,4 +58,10 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
 Open **Configuration** -> **Settings** -> **Security & Membership** and set the `Website logon page URL` field 
 (under Content section) and enter the value `/SignIn.ashx` as shown below. If this setting is set, it overrides the `Oidc:AutoRedirect` app setting.
 ![Add setting](misc/assets/setting.jpg "Add setting")
-***hint***: The response type that is currently used against the authorization endpoint is `code id_token` (so the `Hybrid flow` is used). The `code id_token` flow would get a `code` and `id_token` in the Authentication Response directly but you'd use the `code` to get an `access_token` from the Token endpoint.
+
+***hint***: There are two response types supported with this plugin: `code id_token` or `code`. Use the ResponseType directive in appSettings to select the response type. When the response type is `code id_token`, the `Hybrid flow`. The `code id_token` flow  gets a `code` and `id_token` in the Authentication Response directly but uses the returned `code` to get an `access_token` from the Token endpoint. The `code` response type, authorization code flow, returns only a `code` from the Authorization endpoint. The `id_token` is then retrieved from the Token endpoint using the `code`.
+
+***hint***: Once you've built the project, copy the following three files to Kentico CMS/bin directory:
+  - Indice.Kentico.Oidc.dll
+  - IdentityModel.dll
+  - System.Text.Encodings.Web.dll'
