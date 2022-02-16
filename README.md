@@ -59,7 +59,7 @@ Open **Configuration** -> **Settings** -> **Security & Membership** and set the 
 (under Content section) and enter the value `/SignIn.ashx` as shown below. If this setting is set, it overrides the `Oidc:AutoRedirect` app setting.
 ![Add setting](misc/assets/setting.jpg "Add setting")
 
-***hint***: There are two response types supported with this plugin: `code id_token` or `code`. Use the ResponseType directive in appSettings to select the response type. When the response type is `code id_token` (the `Hybrid flow`), plugin  gets a `code` and `id_token` in the Authentication Response from the Authorization endpoint and uses the returned `code` to get an `access_token` from the Token endpoint. The `code` response type (Authorization Code flow) returns only a `code` from the Authorization endpoint. The `id_token` and `access_token` are then retrieved from the Token endpoint using that returned `code`.
+***hint***: There are two response types supported with this plugin: `code id_token` or `code`. Use the ResponseType directive in appSettings to select the response type. When the response type is `code id_token` (the `Hybrid flow`), this plugin  gets a `code` and `id_token` in the Authentication Response from the Authorization endpoint and uses the returned `code` to get an `access_token` from the Token endpoint. The `code` response type (Authorization Code flow) returns only a `code` from the Authorization endpoint. The `id_token` and `access_token` are then retrieved from the Token endpoint using that returned `code`.
 
 ***hint***: Once you've built the project, copy the following three files to Kentico CMS/bin directory:
   - Indice.Kentico.Oidc.dll
