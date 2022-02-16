@@ -25,7 +25,7 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
     </modules>
     <handlers>
         <add name="SignInHandler" verb="GET" path="SignIn.ashx" type="Indice.Kentico.Oidc.SignInHandler, Indice.Kentico.Oidc" />
-        <add name="SignInOidcHandler" verb="POST" path="SignInOidc.ashx" type="Indice.Kentico.Oidc.SignInOidcHandler, Indice.Kentico.Oidc" />
+        <add name="SignInOidcHandler" verb="GET" path="SignInOidc.ashx" type="Indice.Kentico.Oidc.SignInOidcHandler, Indice.Kentico.Oidc" />
         <add name="RefreshTokenOidcHandler" verb="POST" path="RefreshTokenOidc.ashx" type="Indice.Kentico.Oidc.RefreshTokenOidcHandler, Indice.Kentico.Oidc" />
         <add name="EndSessionOidcHandler" verb="GET" path="SignOut.ashx" type="Indice.Kentico.Oidc.EndSessionOidcHandler, Indice.Kentico.Oidc" />
     </handlers>
@@ -40,12 +40,16 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
     <appSettings>
         <!-- Other keys -->
         <add key="Oidc:AutoRedirect" value="false" />
-        <add key="Oidc:Authority" value="https://identity.example.com" />
-        <add key="Oidc:Host" value="https://example.com" />
-        <add key="Oidc:ClientId" value="my_portal" />
-        <add key="Oidc:ClientSecret" value="my_strong_secret" />
+        <add key="Oidc:Authority" value="https://identity.example.com" /> <!-- Address of OIDC Identity Provider (IDP) -->
+        <add key="Oidc:Host" value="https://example.com" /> <!-- Address of the system that acts as OIDC client -->
+        <add key="Oidc:ClientId" value="client_id_from_IDP" />
+        <add key="Oidc:ClientSecret" value="client_secret_from_IDP" />
         <add key="Oidc:Scopes" value="openid offline_access profile api1 api2" />
         <add key="Oidc:AuthorizeEndpointPath" value="connect/authorize" />
+        <add key="Oidc:TokenEndpointPath" value="oauth2/token" /> 
+        <add key="Oidc:UserInfoEndpointPath" value="oauth2/userInfo" /> 
+        <add key="Oidc:ResponseType" value="CodeIdToken" /> <!-- Allowed values: "Code" or "CodeIdToken" -->
+        <add key="Oidc:UserNameClaim" value="username" /> <!-- The name of the claim returned by the IDP that uniquely identifies the user -->
     </appSettings>
 </configuration>
 ```
