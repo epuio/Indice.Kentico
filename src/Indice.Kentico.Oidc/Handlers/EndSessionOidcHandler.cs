@@ -31,8 +31,9 @@ namespace Indice.Kentico.Oidc
             var endsessionEndpoint = OAuthConfiguration.Authority.TrimEnd('/') + "/" + OAuthConfiguration.EndsessionEndpointPath;
             var requestUrl = new RequestUrl(endsessionEndpoint);
             var endSessionUrl = requestUrl.CreateEndSessionUrl(
-                //idTokenHint: HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken),
-                //postLogoutRedirectUri: OAuthConfiguration.Host,
+                idTokenHint: HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken),
+                postLogoutRedirectUri: OAuthConfiguration.Host,
+                state: null,
                 extra: cognitoParameters
             );
             if (!HttpContext.Current.Response.IsRequestBeingRedirected)
