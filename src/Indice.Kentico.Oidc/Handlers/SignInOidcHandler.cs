@@ -82,16 +82,7 @@ namespace Indice.Kentico.Oidc
             .GetAwaiter()
             .GetResult();
 
-            //LOGGING//
-            StreamWriter sw5 = new StreamWriter("c:\\docs\\logfile1.txt", append: true);
-            sw5.WriteLine("The token response is: " + tokenResponse.Json);
-            sw5.WriteLine("The endpoint is: " + userInfoEndpoint);
-            sw5.WriteLine("The error is: " + userInfoResponse.Error);
-            sw5.WriteLine("The raw is: " + userInfoResponse.Raw);
-            sw5.Close();
-            //END LOGGING//
-
-            if (userInfoResponse.IsError) {
+             if (userInfoResponse.IsError) {
                 throw new Exception("There was an error retrieving user information from authority.", userInfoResponse.Exception);
             }
             // It is important to get the email claim and check if the user exists locally.
@@ -174,11 +165,6 @@ namespace Indice.Kentico.Oidc
                     returnUrl = OAuthConfiguration.Host;
                 }
             }
-            //LOGGING//
-            StreamWriter sw6 = new StreamWriter("c:\\docs\\logfile1.txt", append: true);
-            sw6.WriteLine("The URL is: " + returnUrl);
-            sw6.Close();
-            //END LOGGING//
 
             // Redirect to the requested page.
             context.Response.Redirect(returnUrl);

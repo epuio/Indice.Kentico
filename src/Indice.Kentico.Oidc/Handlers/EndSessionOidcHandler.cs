@@ -2,6 +2,8 @@
 using IdentityModel;
 using IdentityModel.Client;
 using System.Web;
+using System.Collections;
+using System.Collections.Specialized;
 
 namespace Indice.Kentico.Oidc
 {
@@ -22,11 +24,16 @@ namespace Indice.Kentico.Oidc
         {
             // At this point we have already sign out by using FormsAuthentication and we also have to sign out from Identity Server.
             // Create the url to Identity Server's end session endpoint.
-            var endsessionEndpoint = OAuthConfiguration.Authority.TrimEnd('/') + "/connect/endsession";
+            StringDictionary cognitoParameters = new StringDictionary();
+            cognitoParameters.Add("client_id", OAuthConfiguration.ClientId);
+            cognitoParameters.Add("logout_uri", OAuthConfiguration.EndsessionEndpointPath);
+
+            var endsessionEndpoint = OAuthConfiguration.Authority.TrimEnd('/') + "/" + OAuthConfiguration.EndsessionEndpointPath;
             var requestUrl = new RequestUrl(endsessionEndpoint);
             var endSessionUrl = requestUrl.CreateEndSessionUrl(
-                idTokenHint: HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken),
-                postLogoutRedirectUri: OAuthConfiguration.Host
+                //idTokenHint: HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken),
+                //postLogoutRedirectUri: OAuthConfiguration.Host,
+                extra: cognitoParameters
             );
             if (!HttpContext.Current.Response.IsRequestBeingRedirected)
             {
