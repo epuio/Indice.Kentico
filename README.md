@@ -25,7 +25,7 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
     </modules>
     <handlers>
         <add name="SignInHandler" verb="GET" path="SignIn.ashx" type="Indice.Kentico.Oidc.SignInHandler, Indice.Kentico.Oidc" />
-        <add name="SignInOidcHandler" verb="POST" path="SignInOidc.ashx" type="Indice.Kentico.Oidc.SignInOidcHandler, Indice.Kentico.Oidc" />
+        <add name="SignInOidcHandler" verb="GET" path="SignInOidc.ashx" type="Indice.Kentico.Oidc.SignInOidcHandler, Indice.Kentico.Oidc" />
         <add name="RefreshTokenOidcHandler" verb="POST" path="RefreshTokenOidc.ashx" type="Indice.Kentico.Oidc.RefreshTokenOidcHandler, Indice.Kentico.Oidc" />
         <add name="EndSessionOidcHandler" verb="GET" path="SignOut.ashx" type="Indice.Kentico.Oidc.EndSessionOidcHandler, Indice.Kentico.Oidc" />
     </handlers>
@@ -40,12 +40,16 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
     <appSettings>
         <!-- Other keys -->
         <add key="Oidc:AutoRedirect" value="false" />
-        <add key="Oidc:Authority" value="https://identity.example.com" />
-        <add key="Oidc:Host" value="https://example.com" />
-        <add key="Oidc:ClientId" value="my_portal" />
-        <add key="Oidc:ClientSecret" value="my_strong_secret" />
+        <add key="Oidc:Authority" value="https://identity.example.com" /> <!-- Address of OIDC Identity Provider (IDP) -->
+        <add key="Oidc:Host" value="https://example.com" /> <!-- Address of the system that acts as OIDC client -->
+        <add key="Oidc:ClientId" value="client_id_from_IDP" />
+        <add key="Oidc:ClientSecret" value="client_secret_from_IDP" />
         <add key="Oidc:Scopes" value="openid offline_access profile api1 api2" />
         <add key="Oidc:AuthorizeEndpointPath" value="connect/authorize" />
+        <add key="Oidc:TokenEndpointPath" value="oauth2/token" /> 
+        <add key="Oidc:UserInfoEndpointPath" value="oauth2/userInfo" /> 
+        <add key="Oidc:ResponseType" value="CodeIdToken" /> <!-- Allowed values: "Code" or "CodeIdToken" -->
+        <add key="Oidc:UserNameClaim" value="username" /> <!-- The name of the claim returned by the IDP that uniquely identifies the user -->
     </appSettings>
 </configuration>
 ```
@@ -54,4 +58,10 @@ This repo contains a custom authentication [HTTP Module](https://docs.microsoft.
 Open **Configuration** -> **Settings** -> **Security & Membership** and set the `Website logon page URL` field 
 (under Content section) and enter the value `/SignIn.ashx` as shown below. If this setting is set, it overrides the `Oidc:AutoRedirect` app setting.
 ![Add setting](misc/assets/setting.jpg "Add setting")
-***hint***: The response type that is currently used against the authorization endpoint is `code id_token` (so the `Hybrid flow` is used). The `code id_token` flow would get a `code` and `id_token` in the Authentication Response directly but you'd use the `code` to get an `access_token` from the Token endpoint.
+
+***hint***: There are two response types supported with this plugin: `code id_token` or `code`. Use the ResponseType directive in appSettings to select the response type the plugin will use. The `code id_token` response type (the `Hybrid flow`) returns a `code` and `id_token` in the Authentication Response from the Authorization endpoint. The plugin then uses the returned `code` to get an `access_token` from the Token endpoint. The `code` response type (Authorization Code flow) returns only a `code` from the Authorization endpoint. The `id_token` and `access_token` are then retrieved from the Token endpoint using the returned `code`.
+
+***hint***: Once you've built the project, copy the following three files to Kentico CMS/bin directory:
+  - Indice.Kentico.Oidc.dll
+  - IdentityModel.dll
+  - System.Text.Encodings.Web.dll'
