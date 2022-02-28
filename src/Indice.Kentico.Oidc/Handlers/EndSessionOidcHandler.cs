@@ -24,6 +24,8 @@ namespace Indice.Kentico.Oidc
         {
             // At this point we have already sign out by using FormsAuthentication and we also have to sign out from Identity Server.
             // Create the url to Identity Server's end session endpoint.
+
+            // Creating string dictionary for extra parameter
             StringDictionary cognitoParameters = new StringDictionary();
             cognitoParameters.Add("client_id", OAuthConfiguration.ClientId);
             cognitoParameters.Add("logout_uri", OAuthConfiguration.EndsessionEndpointPath);
