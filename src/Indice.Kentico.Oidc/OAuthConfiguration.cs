@@ -18,6 +18,5 @@ namespace Indice.Kentico.Oidc
         public static string UserInfoEndpointPath => ConfigurationManager.AppSettings["Oidc:UserInfoEndpointPath"]?.TrimStart('/') ?? "connect/authorize";
         public static string EndsessionEndpointPath => ConfigurationManager.AppSettings["Oidc:EndsessionEndpointPath"]?.TrimStart('/') ?? "connect/endsession";
         public static string EndsessionExtraParameters => ConfigurationManager.AppSettings["Oidc:EndsessionExtraParameters"] ?? "{}";
-        public static bool EndsessionExcludeDefaultParameters => bool.TryParse(ConfigurationManager.AppSettings["Oidc:EndsessionExcludeDefaultParameters"], out var endsessionExcludeDefaultParameters) ? endsessionExcludeDefaultParameters : false;
     }
 }
