@@ -21,11 +21,15 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="System.Text.Json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\icon\icon-128.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="3.10.6" />
     <PackageReference Include="Kentico.Libraries" Version="12.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web" />

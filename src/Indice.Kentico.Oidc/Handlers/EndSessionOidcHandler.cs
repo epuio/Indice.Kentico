@@ -4,6 +4,8 @@ using IdentityModel.Client;
 using System.Web;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Indice.Kentico.Oidc
 {
@@ -26,17 +28,36 @@ namespace Indice.Kentico.Oidc
             // Create the url to Identity Server's end session endpoint.
 
             // Creating string dictionary for extra parameter
-            StringDictionary cognitoParameters = new StringDictionary();
-            cognitoParameters.Add("client_id", OAuthConfiguration.ClientId);
-            cognitoParameters.Add("logout_uri", OAuthConfiguration.EndsessionEndpointPath);
+            //IDictionary extraParameters = new Dictionary<string,string>() {
+            //    { "client_id", OAuthConfiguration.ClientId },
+            //    { "logout_uri", OAuthConfiguration.Host.TrimEnd('/') + "/SignOut.ashx" }
+            //};
+            IDictionary extraParameters = new Dictionary<string, string>();
+            //if (OAuthConfiguration.EndsessionExtraParameters != null) {
+            //    extraParameters.Add("client_id", OAuthConfiguration.ClientId);
+            //    extraParameters.Add("logout_uri", OAuthConfiguration.Host.TrimEnd('/'));
+            //}
+            var extraValues = JsonConvert.DeserializeObject<Dictionary<string, string>>(OAuthConfiguration.EndsessionExtraParameters);
+            if (OAuthConfiguration.EndsessionExtraParameters != null) {
+                foreach (KeyValuePair<string, string> entry in extraValues) {
+                    // do something with entry.Value or entry.Key
+                    extraParameters.Add(entry.Key, entry.Value);
+                };
+                //extraParameters.Add("client_id", OAuthConfiguration.ClientId);
+                //extraParameters.Add("logout_uri", OAuthConfiguration.Host.TrimEnd('/'));
+            }
+
+            // Set the default CreateSessionUrl parameters if configuration indicates they should be
+            string idTokenHint = (OAuthConfiguration.EndsessionExcludeDefaultParameters) ? null : HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken);
+            string postLogoutRedirectUri = (OAuthConfiguration.EndsessionExcludeDefaultParameters) ? null : OAuthConfiguration.Host;
 
             var endsessionEndpoint = OAuthConfiguration.Authority.TrimEnd('/') + "/" + OAuthConfiguration.EndsessionEndpointPath;
             var requestUrl = new RequestUrl(endsessionEndpoint);
             var endSessionUrl = requestUrl.CreateEndSessionUrl(
-                idTokenHint: HttpContext.Current.GetToken(OidcConstants.ResponseTypes.IdToken),
-                postLogoutRedirectUri: OAuthConfiguration.Host,
+                idTokenHint: idTokenHint,
+                postLogoutRedirectUri: postLogoutRedirectUri,
                 state: null,
-                extra: cognitoParameters
+                extra: extraParameters
             );
             if (!HttpContext.Current.Response.IsRequestBeingRedirected)
             {
