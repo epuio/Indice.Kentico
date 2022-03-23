@@ -16,7 +16,12 @@ namespace Indice.Kentico.Oidc
         public static string AuthorizeEndpointPath => ConfigurationManager.AppSettings["Oidc:AuthorizeEndpointPath"]?.TrimStart('/') ?? "connect/authorize";
         public static string TokenEndpointPath => ConfigurationManager.AppSettings["Oidc:TokenEndpointPath"]?.TrimStart('/') ?? "connect/authorize";
         public static string UserInfoEndpointPath => ConfigurationManager.AppSettings["Oidc:UserInfoEndpointPath"]?.TrimStart('/') ?? "connect/authorize";
+        
+        // EndsessionEndpointPath points to the IDP endpoint used to log the user out of the IDP
         public static string EndsessionEndpointPath => ConfigurationManager.AppSettings["Oidc:EndsessionEndpointPath"]?.TrimStart('/') ?? "connect/endsession";
+        
+        // EndsessionExtraParameters is used if you must provide additional parameters with endsesson (logout) request
+        // For example, for Cognito, it would be: <add key="Oidc:EndsessionExtraParameters" value='{ "client_id": "********", "logout_url": "https://example.com/logout" }' />
         public static string EndsessionExtraParameters => ConfigurationManager.AppSettings["Oidc:EndsessionExtraParameters"] ?? "{}";
     }
 }
